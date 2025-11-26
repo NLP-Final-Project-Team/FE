@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import CustomerService from "./components/CustomerService";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <Link href="/" className="flex items-center space-x-2 group">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-violet-600 flex items-center justify-center shadow-md">
                   <span className="text-white font-bold text-lg">N</span>
                 </div>
                 <span className="text-xl font-bold gradient-text">
@@ -31,16 +32,16 @@ export default function RootLayout({
               </Link>
 
               <div className="flex items-center space-x-4">
-                <Link href="/" className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-lg font-medium transition-colors">
+                <Link href="/" className="text-gray-600 hover:text-purple-600 px-3 py-2 rounded-lg font-medium transition-colors">
                   홈
                 </Link>
-                <Link href="/training" className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-lg font-medium transition-colors">
+                <Link href="/training" className="text-gray-600 hover:text-purple-600 px-3 py-2 rounded-lg font-medium transition-colors">
                   훈련
                 </Link>
-                <Link href="/login" className="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-lg font-medium transition-colors">
+                <Link href="/login" className="text-gray-600 hover:text-purple-600 px-3 py-2 rounded-lg font-medium transition-colors">
                   로그인
                 </Link>
-                <Link href="/signup" className="btn-primary text-sm">
+                <Link href="/signup" className="btn-primary text-sm px-3 py-1.5">
                   회원가입
                 </Link>
               </div>
@@ -57,6 +58,8 @@ export default function RootLayout({
             &copy; {new Date().getFullYear()} NLP 프로젝트. All rights reserved.
           </div>
         </footer>
+
+        <CustomerService />
       </body>
     </html>
   );

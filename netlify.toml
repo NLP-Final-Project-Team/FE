@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+# 추후 백엔드 API 연동 시 CORS 문제를 해결하기 위한 프록시 설정 예시입니다.
+# 백엔드가 배포되면 아래 주석을 해제하고 URL을 변경해서 사용하세요.
+# [[redirects]]
+#   from = "/api/*"
+#   to = "https://your-backend-api.com/api/:splat"
+#   status = 200
+#   force = true
+
+# SPA 라우팅을 위한 Fallback (정적 파일이 없을 경우 404 대신 처리)
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

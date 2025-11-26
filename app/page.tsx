@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, Send } from "lucide-react";
+import { Sparkles, Send, Zap, Heart, Palette } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -21,7 +21,6 @@ export default function Home() {
       return;
     }
 
-    // URL params로 전달
     const params = new URLSearchParams({
       keywords: formData.keywords,
       tone: formData.tone,
@@ -33,56 +32,66 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="min-h-screen py-16 px-6">
+      <div className="max-w-5xl mx-auto animate-fade-in">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-full text-indigo-700 text-sm font-medium mb-6">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-purple-50 to-violet-50 border-2 border-purple-200 rounded-full text-purple-700 text-sm font-semibold mb-8 shadow-sm">
             <Sparkles className="w-4 h-4" />
             <span>AI 기반 문장 생성 도구</span>
           </div>
 
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            키워드를 입력하면{" "}
-            <span className="gradient-text">자연스러운 문장</span>을<br />
-            만들어드립니다
+          <h1 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            키워드만 입력하면
+            <br />
+            <span className="gradient-text">완벽한 문장</span>이 완성됩니다
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            간단한 키워드만 입력하세요. AI가 상황에 맞는 완벽한 문장을 생성합니다.
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            복잡한 생각 정리는 이제 AI에게 맡기세요
+            <br className="hidden sm:block" />
+            간단한 키워드만으로 상황에 맞는 자연스러운 문장을 만들어드립니다
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="card max-w-3xl mx-auto">
-          <div className="space-y-6">
-            {/* Keyword Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                키워드 / 짧은 문장 입력
-              </label>
-              <textarea
-                value={formData.keywords}
-                onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
-                placeholder="예: 병원 / 내일 / 결석 / 과제 연장"
-                rows={4}
-                className="input-field resize-none"
-              />
-              <p className="text-xs text-gray-500 mt-2">
-                키워드를 / 또는 , 로 구분하여 입력하세요
-              </p>
+        {/* Features */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
+          <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Zap className="w-8 h-8 text-white" />
             </div>
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">빠른 이해</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">AI가 상황을 즉시 파악하여<br />적절한 문장을 생성합니다</p>
+          </div>
+          <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-violet-50 to-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-fuchsia-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Heart className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">자연스러움</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">어색하지 않고<br />완벽하게 구성된 문장</p>
+          </div>
+          <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-fuchsia-50 to-white hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-400 to-pink-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Palette className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">맞춤 스타일</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">상황과 대상에 맞게<br />톤을 자동으로 조절합니다</p>
+          </div>
+        </div>
 
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="card max-w-4xl mx-auto mb-16">
+          <div className="space-y-8">
             {/* Options Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
               {/* Tone Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  톤 선택
+              <div className="flex flex-col">
+                <label className="block text-base font-semibold text-gray-800 mb-4">
+                  🎭 톤 선택
                 </label>
                 <select
                   value={formData.tone}
                   onChange={(e) => setFormData({ ...formData, tone: e.target.value })}
-                  className="select-field"
+                  className="select-field h-[3.5rem]"
                 >
                   <option value="neutral">기본 톤</option>
                   <option value="polite">정중하게</option>
@@ -92,25 +101,27 @@ export default function Home() {
               </div>
 
               {/* Length Option */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  길이 옵션
+              <div className="flex flex-col">
+                <label className="block text-base font-semibold text-gray-800 mb-4">
+                  📏 길이 옵션
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 h-[3.5rem]">
                   {[
-                    { value: "short", label: "짧게" },
-                    { value: "normal", label: "보통" },
-                    { value: "long", label: "자세하게" },
+                    { value: "short", label: "짧게", emoji: "📝" },
+                    { value: "normal", label: "보통", emoji: "📄" },
+                    { value: "long", label: "자세하게", emoji: "📑" },
                   ].map((option) => (
                     <button
                       key={option.value}
                       type="button"
                       onClick={() => setFormData({ ...formData, length: option.value })}
-                      className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${formData.length === option.value
-                          ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md"
+                      className={`flex-1 px-3 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center h-full ${
+                        formData.length === option.value
+                          ? "bg-gradient-to-r from-[#a78bfa] to-[#c084fc] text-white shadow-lg"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
+                      }`}
                     >
+                      <span className="mr-1">{option.emoji}</span>
                       {option.label}
                     </button>
                   ))}
@@ -118,14 +129,14 @@ export default function Home() {
               </div>
 
               {/* Target Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  말하는 대상
+              <div className="flex flex-col">
+                <label className="block text-base font-semibold text-gray-800 mb-4">
+                  👤 말하는 대상
                 </label>
                 <select
                   value={formData.target}
                   onChange={(e) => setFormData({ ...formData, target: e.target.value })}
-                  className="select-field"
+                  className="select-field h-[3.5rem]"
                 >
                   <option value="professor">교수님</option>
                   <option value="senior_junior">선/후배</option>
@@ -135,38 +146,34 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Keyword Input */}
+            <div>
+              <label className="block text-base font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+                <span>💬</span>
+                <span>키워드 또는 짧은 문장을 입력하세요</span>
+              </label>
+              <textarea
+                value={formData.keywords}
+                onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
+                placeholder="예: 병원 / 내일 / 결석 / 과제 연장&#10;또는: 내일 병원 가야 해서 수업 못 갈 것 같아요"
+                rows={5}
+                className="input-field resize-none text-base"
+              />
+              <p className="text-sm text-gray-500 mt-3 ml-1">
+                💡 키워드는 / 또는 , 로 구분하세요
+              </p>
+            </div>
+
             {/* Submit Button */}
-            <button type="submit" className="w-full btn-primary flex items-center justify-center space-x-2 py-4">
+            <button 
+              type="submit" 
+              className="w-full btn-primary flex items-center justify-center space-x-3 py-5 text-lg mt-8"
+            >
               <span>문장 생성하기</span>
               <Send className="w-5 h-5" />
             </button>
           </div>
         </form>
-
-        {/* Features */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">🎯</span>
-            </div>
-            <h3 className="font-semibold text-gray-900 mb-1">상황 자동 파악</h3>
-            <p className="text-sm text-gray-600">AI가 의도를 분석합니다</p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">✨</span>
-            </div>
-            <h3 className="font-semibold text-gray-900 mb-1">자연스러운 문장</h3>
-            <p className="text-sm text-gray-600">완벽한 문장 구성</p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">🎨</span>
-            </div>
-            <h3 className="font-semibold text-gray-900 mb-1">맞춤형 스타일</h3>
-            <p className="text-sm text-gray-600">상황에 맞는 톤 조절</p>
-          </div>
-        </div>
       </div>
     </div>
   );

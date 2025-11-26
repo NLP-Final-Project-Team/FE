@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Volume2, Copy, RefreshCw, ArrowLeft, Check } from "lucide-react";
+import { Volume2, Copy, RefreshCw, ArrowLeft, Check, Pause, Play } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 // Mock data
@@ -29,11 +29,15 @@ function ResultContent() {
     const keywords = searchParams.get("keywords") || "";
     const tone = searchParams.get("tone") || "neutral";
     const length = searchParams.get("length") || "normal";
+    const target = searchParams.get("target") || "professor";
 
 
     const [generatedText, setGeneratedText] = useState(MOCK_GENERATED_SENTENCE);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+    const [pausedIndex, setPausedIndex] = useState<number | null>(null);
     const [modifyOptions, setModifyOptions] = useState({
         tone: tone,
         length: length,
@@ -41,13 +45,74 @@ function ResultContent() {
 
     const handleTTS = () => {
         if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(generatedText);
-            utterance.lang = 'ko-KR';
-            setIsSpeaking(true);
-            utterance.onend = () => setIsSpeaking(false);
-            window.speechSynthesis.speak(utterance);
+            if (isPaused) {
+                // 재개
+                window.speechSynthesis.resume();
+                setIsPaused(false);
+            } else {
+                // 새로 재생
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(generatedText);
+                utterance.lang = 'ko-KR';
+                setIsSpeaking(true);
+                setIsPaused(false);
+                utterance.onend = () => {
+                    setIsSpeaking(false);
+                    setIsPaused(false);
+                };
+                window.speechSynthesis.speak(utterance);
+            }
         } else {
             alert("이 브라우저에서는 TTS가 지원되지 않습니다.");
+        }
+    };
+
+    const handlePauseTTS = () => {
+        if ('speechSynthesis' in window) {
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                setIsPaused(false);
+            } else {
+                window.speechSynthesis.pause();
+                setIsPaused(true);
+            }
+        }
+    };
+
+    const handleSimilarSentenceTTS = (sentence: string, index: number) => {
+        if ('speechSynthesis' in window) {
+            if (pausedIndex === index) {
+                // 재개
+                window.speechSynthesis.resume();
+                setPausedIndex(null);
+            } else {
+                // 이전 재생 중지
+                window.speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(sentence);
+                utterance.lang = 'ko-KR';
+                setSpeakingIndex(index);
+                setPausedIndex(null);
+                utterance.onend = () => {
+                    setSpeakingIndex(null);
+                    setPausedIndex(null);
+                };
+                window.speechSynthesis.speak(utterance);
+            }
+        } else {
+            alert("이 브라우저에서는 TTS가 지원되지 않습니다.");
+        }
+    };
+
+    const handlePauseSimilarTTS = (index: number) => {
+        if ('speechSynthesis' in window) {
+            if (pausedIndex === index) {
+                window.speechSynthesis.resume();
+                setPausedIndex(null);
+            } else {
+                window.speechSynthesis.pause();
+                setPausedIndex(index);
+            }
         }
     };
 
@@ -83,13 +148,23 @@ function ResultContent() {
         return labels[value] || value;
     };
 
+    const getTargetLabel = (value: string) => {
+        const labels: Record<string, string> = {
+            professor: "교수님",
+            senior_junior: "선/후배",
+            friend: "친구",
+            boss: "상사",
+        };
+        return labels[value] || value;
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-6">
             <div className="max-w-7xl mx-auto">
                 {/* Back Button */}
                 <button
                     onClick={() => router.push("/")}
-                    className="flex items-center space-x-2 text-gray-600 hover:text-indigo-600 mb-8 transition-colors"
+                    className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 mb-8 transition-colors"
                 >
                     <ArrowLeft className="w-5 h-5" />
                     <span>돌아가기</span>
@@ -103,11 +178,14 @@ function ResultContent() {
                             <h3 className="text-sm font-medium text-gray-500 mb-2">입력한 키워드</h3>
                             <p className="text-lg text-gray-900">{keywords}</p>
                             <div className="flex gap-2 mt-3">
-                                <span className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">
+                                <span className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">
                                     {getToneLabel(tone)}
                                 </span>
                                 <span className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">
                                     {getLengthLabel(length)}
+                                </span>
+                                <span className="px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-sm">
+                                    {getTargetLabel(target)}
                                 </span>
                             </div>
                         </div>
@@ -119,22 +197,30 @@ function ResultContent() {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleTTS}
-                                        disabled={isSpeaking}
-                                        className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                                        title="음성으로 듣기"
+                                        className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                        title={isPaused ? "재개" : "음성으로 듣기"}
                                     >
-                                        <Volume2 className="w-5 h-5" />
+                                        {isPaused ? <Play className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                                     </button>
+                                    {isSpeaking && !isPaused && (
+                                        <button
+                                            onClick={handlePauseTTS}
+                                            className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                            title="일시정지"
+                                        >
+                                            <Pause className="w-5 h-5" />
+                                        </button>
+                                    )}
                                     <button
                                         onClick={handleCopy}
-                                        className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                        className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                                         title="복사하기"
                                     >
                                         {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5" />}
                                     </button>
                                 </div>
                             </div>
-                            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
+                            <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
                                 <p className="text-lg leading-relaxed text-gray-800">{generatedText}</p>
                             </div>
                         </div>
@@ -185,13 +271,41 @@ function ResultContent() {
                                 {MOCK_SIMILAR_SENTENCES.map((sentence, index) => (
                                     <div
                                         key={index}
-                                        className="p-4 bg-gray-50 rounded-xl hover:bg-indigo-50 transition-colors cursor-pointer group"
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(sentence);
-                                            alert("클립보드에 복사되었습니다!");
-                                        }}
+                                        className="p-4 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors group flex items-start justify-between gap-3"
                                     >
-                                        <p className="text-gray-700 group-hover:text-indigo-900">{sentence}</p>
+                                        <p 
+                                            className="text-gray-700 group-hover:text-purple-900 flex-1 cursor-pointer"
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(sentence);
+                                                alert("클립보드에 복사되었습니다!");
+                                            }}
+                                        >
+                                            {sentence}
+                                        </p>
+                                        <div className="flex gap-1 flex-shrink-0">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSimilarSentenceTTS(sentence, index);
+                                                }}
+                                                className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                                title={pausedIndex === index ? "재개" : "음성으로 듣기"}
+                                            >
+                                                {pausedIndex === index ? <Play className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                                            </button>
+                                            {speakingIndex === index && pausedIndex !== index && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handlePauseSimilarTTS(index);
+                                                    }}
+                                                    className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                                    title="일시정지"
+                                                >
+                                                    <Pause className="w-4 h-4" />
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -221,8 +335,8 @@ function ResultContent() {
                                         <Bar dataKey="similarity" fill="url(#colorGradient)" radius={[0, 4, 4, 0]} />
                                         <defs>
                                             <linearGradient id="colorGradient" x1="0" y1="0" x2="1" y2="0">
-                                                <stop offset="0%" stopColor="#6366f1" />
-                                                <stop offset="100%" stopColor="#a855f7" />
+                                                <stop offset="0%" stopColor="#a78bfa" />
+                                                <stop offset="100%" stopColor="#c084fc" />
                                             </linearGradient>
                                         </defs>
                                     </BarChart>
@@ -231,7 +345,7 @@ function ResultContent() {
                         </div>
 
                         {/* Actions */}
-                        <div className="card bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
+                        <div className="card bg-gradient-to-br from-purple-50 to-violet-50 border-purple-100">
                             <h3 className="font-semibold text-gray-900 mb-3">만족하지 못하셨나요?</h3>
                             <p className="text-sm text-gray-600 mb-4">
                                 다시 입력하거나 훈련 모드에서 직접 작성해보세요.

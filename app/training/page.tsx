@@ -86,7 +86,7 @@ export default function TrainingPage() {
                         <button
                             onClick={() => setMode("write")}
                             className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${mode === "write"
-                                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md"
+                                    ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-md"
                                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                 }`}
                         >
@@ -96,7 +96,7 @@ export default function TrainingPage() {
                         <button
                             onClick={() => setMode("convert")}
                             className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${mode === "convert"
-                                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md"
+                                    ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-md"
                                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                 }`}
                         >
@@ -108,8 +108,8 @@ export default function TrainingPage() {
                     {/* Mode A: Write & Evaluate */}
                     {mode === "write" && (
                         <div className="space-y-6">
-                            <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-                                <p className="text-indigo-900 font-medium">
+                            <div className="bg-purple-50 border border-purple-100 rounded-xl p-4">
+                                <p className="text-purple-900 font-medium">
                                     💡 상황과 키워드가 주어집니다. 직접 문장을 작성해보고 AI의 채점을 받아보세요!
                                 </p>
                             </div>
@@ -185,8 +185,8 @@ export default function TrainingPage() {
 
                                     {/* Scores */}
                                     <div className="grid grid-cols-3 gap-4">
-                                        <div className="card bg-indigo-50 border-indigo-100 text-center">
-                                            <div className="text-3xl font-bold text-indigo-600 mb-1">{evaluation.scores.politeness}</div>
+                                        <div className="card bg-purple-50 border-purple-100 text-center">
+                                            <div className="text-3xl font-bold text-purple-600 mb-1">{evaluation.scores.politeness}</div>
                                             <div className="text-sm text-gray-600">정중함</div>
                                         </div>
                                         <div className="card bg-purple-50 border-purple-100 text-center">
@@ -206,7 +206,7 @@ export default function TrainingPage() {
                                     </div>
 
                                     {/* AI Suggestion */}
-                                    <div className="card bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-100">
+                                    <div className="card bg-gradient-to-r from-purple-50 to-violet-50 border-purple-100">
                                         <h4 className="font-semibold text-gray-900 mb-2">AI가 제안하는 수정 문장</h4>
                                         <p className="text-gray-800 leading-relaxed">{evaluation.aiSuggestion}</p>
                                     </div>
@@ -274,7 +274,7 @@ export default function TrainingPage() {
                                         <p className="text-gray-800">{convertFeedback.message}</p>
                                     </div>
 
-                                    <div className="card bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-100">
+                                    <div className="card bg-gradient-to-r from-purple-50 to-violet-50 border-purple-100">
                                         <h4 className="font-semibold text-gray-900 mb-2">AI 예시</h4>
                                         <p className="text-gray-800">{convertFeedback.aiExample}</p>
                                     </div>

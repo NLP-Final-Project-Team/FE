@@ -31,13 +31,13 @@ export default function SignupPage() {
         <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 items-center justify-center mb-4 shadow-xl">
+                    <div className="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-violet-600 items-center justify-center mb-4 shadow-xl">
                         <span className="text-white font-bold text-2xl">N</span>
                     </div>
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">회원가입</h2>
                     <p className="text-gray-600">
                         이미 계정이 있으신가요?{" "}
-                        <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+                        <Link href="/login" className="text-purple-600 hover:text-purple-700 font-medium">
                             로그인
                         </Link>
                     </p>

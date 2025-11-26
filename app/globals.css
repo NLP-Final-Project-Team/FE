@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+@theme {
+  /* 보라색 계열 메인 색상 (연한 톤) */
+  --color-primary: #a78bfa;
+  --color-primary-light: #c4b5fd;
+  --color-primary-dark: #8b5cf6;
+  --color-secondary: #c084fc;
+  --color-accent: #d8b4fe;
+  --color-warm: #e9d5ff;
+}
+
+/* Utilidades personalizadas */
+@utility gradient-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+
+@utility card {
+  background-color: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: none;
+  padding: 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+@utility btn-primary {
+  padding: 1.125rem 2.25rem;
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(167, 139, 250, 0.4);
+    background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 100%);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@utility btn-secondary {
+  padding: 1rem 2rem;
+  background-color: white;
+  color: #333;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background-color: #f8f8f8;
+    border-color: #a78bfa;
+    color: #a78bfa;
+    transform: translateY(-2px);
+  }
+}
+
+@utility input-field {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e8e8e8;
+  border-radius: 16px;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+  background-color: #fafafa;
+
+  &:focus {
+    border-color: #a78bfa;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1);
+  }
+}
+
+@utility select-field {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e8e8e8;
+  border-radius: 16px;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #fafafa;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &:focus {
+    border-color: #a78bfa;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.1);
+  }
+}
+
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+  color: #2d3748;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+  line-height: 1.6;
+}
+
+/* Animaciones suaves */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #a78bfa, #c084fc);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #c4b5fd, #d8b4fe);
+}
